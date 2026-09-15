@@ -4,40 +4,62 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
+// Task 6 - Register
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let username = req.body.username;
+  let password = req.body.password;
+
+  if(username && password){
+    if(isValid(username)){
+      users.push({username: username, password: password});
+      return res.status(200).json({message: "User registered"});
+    } else {
+      return res.status(200).json({message: "User already exists"});
+    }
+  } else {
+    return res.status(200).json({message: "Username and password required"});
+  }
 });
 
-// Get the book list available in the shop
+// Task 1 - Get all books
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  res.send(books);
 });
 
-// Get book details based on ISBN
+// Task 2 - Get by ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let isbn = req.params.isbn;
+  res.send(books[isbn]);
  });
-  
-// Get book details based on author
+
+// Task 3 - Get by Author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let author = req.params.author;
+  let result = [];
+  for(let key in books){
+    if(books[key].author == author){
+      result.push(books[key]);
+    }
+  }
+  res.send(result);
 });
 
-// Get all books based on title
+// Task 4 - Get by Title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let title = req.params.title;
+  let result = [];
+  for(let key in books){
+    if(books[key].title == title){
+      result.push(books[key]);
+    }
+  }
+  res.send(result);
 });
 
-//  Get book review
+// Task 5 - Get review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let isbn = req.params.isbn;
+  res.send(books[isbn].reviews);
 });
 
 module.exports.general = public_users;
